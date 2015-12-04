@@ -4,23 +4,20 @@
 {
     //Required. Inputs the module expects.
     "inputs": [
-        //e.g.
-        /*
         {
-            "id": "from",
-            "title":"From"
+            "id": "owner_id",
+            "title":"The Spotify user ID of the person who owns the playlist"
+        },
+        {
+            "id": "playlist_id",
+            "title":"The Spotify ID of the playlist"
+        },
+        {
+            "id": "public",
+            "title":"public"
         }
-        */
     ],
     //Required. Outputs the module emits.
-    "outputs": [
-      //e.g.
-      /*
-        {
-            "id": "from",
-            "title":"From"
-        }
-      */
-    ],
+    "outputs": [],
     "title": "Spotify Follow Playlist" /* Required.A display name for the module */
 }
