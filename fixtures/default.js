@@ -65,7 +65,7 @@ module.exports = _.merge({
                 //Replace VAR1 with the name of an expected input, and add more inputs as needed.
                 owner_id: 'jmperezperez',
                 playlist_id: '2v3iNvBX8Ay1Gt2uXtUKUT',
-                public: true
+                public: 'true'
             }
         }
     }

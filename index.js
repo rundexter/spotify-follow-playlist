@@ -45,10 +45,13 @@ module.exports = {
     run: function(step, dexter) {
 
         var spotifyApi = new SpotifyWebApi();
+        var options = step.input('public').first()? {
+            public: step.input('public').first().toLowerCase() === 'true'
+        } : {};
 
         this.authParams(dexter, spotifyApi);
 
-        spotifyApi.followPlaylist(step.input('owner_id').first(), step.input('playlist_id').first(), _.pick(step.inputs(), 'public'))
+        spotifyApi.followPlaylist(step.input('owner_id').first(), step.input('playlist_id').first(), options)
             .then(function(data) {
 
                 this.complete({});
