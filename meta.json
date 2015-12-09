@@ -19,5 +19,6 @@
     ],
     //Required. Outputs the module emits.
     "outputs": [],
+    "icon": "spotify",
     "title": "Spotify Follow Playlist" /* Required.A display name for the module */
 }
