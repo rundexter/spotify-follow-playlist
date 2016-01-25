@@ -19,6 +19,13 @@
     ],
     //Required. Outputs the module emits.
     "outputs": [],
+    "providers": [{
+        "name": "spotify",
+        "scopes": [
+            "playlist-modify-public",
+            "playlist-modify-private"
+        ]
+    }],
     "icon": "spotify",
     "title": "Spotify Follow Playlist" /* Required.A display name for the module */
 }

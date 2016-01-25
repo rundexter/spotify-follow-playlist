@@ -1,41 +1,14 @@
-var _ = require('lodash');
-var SpotifyWebApi = require('spotify-web-api-node');
+var _ = require('lodash'),
+    util = require('./util.js'),
+    SpotifyWebApi = require('spotify-web-api-node');
+
+var pickInputs = {
+    'owner_id': {key: 'owner_id', validate: { req: true } },
+    'playlist_id': {key: 'playlist_id', validate: { req: true } },
+    'public': { key: 'ids', type: 'boolean' }
+};
 
 module.exports = {
-
-    /**
-     * Set acess token.
-     *
-     * @param dexter
-     * @param spotifyApi
-     */
-    authParams: function (dexter, spotifyApi) {
-
-        if (dexter.environment('spotify_access_token')) {
-
-            spotifyApi.setAccessToken(dexter.environment('spotify_access_token'));
-        }
-    },
-
-    /**
-     * Set failure response.
-     *
-     * @param err
-     * @param dexter
-     */
-    failureProcess: function (err, dexter) {
-
-        var result = _.isArray(err)? err : [err];
-
-        if (!dexter.environment('spotify_access_token')) {
-            var envError = 'This module need optional environment variable [spotify_access_token];';
-
-            result.unshift(envError);
-        }
-
-        return result;
-    },
-
     /**
      * The main entry point for the Dexter module.
      *
@@ -43,21 +16,20 @@ module.exports = {
      * @param {AppData} dexter Container for all data used in this workflow.
      */
     run: function(step, dexter) {
+        var spotifyApi = new SpotifyWebApi(),
+            token = dexter.provider('spotify').credentials('access_token'),
+            inputs = util.pickInputs(step, pickInputs),
+            validateErrors = util.checkValidateErrors(inputs, pickInputs);
 
-        var spotifyApi = new SpotifyWebApi();
-        var options = step.input('public').first()? {
-            public: step.input('public').first().toLowerCase() === 'true'
-        } : {};
+        if (validateErrors)
+            return this.fail(validateErrors);
 
-        this.authParams(dexter, spotifyApi);
-
-        spotifyApi.followPlaylist(step.input('owner_id').first(), step.input('playlist_id').first(), options)
-            .then(function(data) {
-
+        spotifyApi.setAccessToken(token);
+        spotifyApi.followPlaylist(inputs.owner_id, inputs.playlist_id, _.get(inputs, 'public'))
+            .then(function() {
                 this.complete({});
             }.bind(this), function(err) {
-
-                this.fail(this.failureProcess(err, dexter));
+                this.fail(err);
             }.bind(this));
     }
 };
